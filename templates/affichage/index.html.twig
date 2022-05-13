@@ -5,13 +5,22 @@
 {% endblock%}
 
 {% block body%}
-    <div class="alert alert-info">Nombre de Pfe par entreprise</div>
-    {% for key in entreprise %}
-        <div class="card text-white bg-primary mb-3" style="max-width: 18rem">
-            <div class="card-body">
-                <h5 class="card-title">{{ key.designation }}</h5>
-                <p class="card-text">{{ key.pFEs.count() }} Pfe(s)</p>
+    <div class="row">
+        <div class="alert alert-info">Nombre de Pfe par entreprise</div>
+        {% for key in entreprise %}
+            {% if key.pFEs.count()>=3 %}
+                {% set bgColor = "bg-primary" %}
+            {% elseif key.pFEs.count()==2 %}
+                {% set bgColor= "bg-info" %}
+            {% else %}
+                {% set bgColor= "bg-secondary"%}
+            {% endif %}
+            <div class="card text-white {{bgColor}} mb-3 m-2" style="max-width: 18rem">
+                <div class="card-body">
+                    <h5 class="card-title">{{ key.designation }}</h5>
+                    <p class="card-text">{{ key.pFEs.count() }} Pfe(s)</p>
+                </div>
             </div>
-        </div>
-    {% endfor%}
+        {% endfor%}
+    </div>
 {% endblock%}

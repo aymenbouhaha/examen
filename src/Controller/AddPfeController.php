@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AddPfeController extends AbstractController
 {
-    public function __construct(private PFERepository $repository,private EntrepriseRepository $entrepriseRepository)
+    public function __construct(private PFERepository $repository )
     {
     }
 
@@ -24,20 +24,17 @@ class AddPfeController extends AbstractController
         $form=$this->createForm(PFEType::class,$pfe);
         $form->handleRequest($request);
         if ($form->isSubmitted()){
-            $entreprise=$this->entrepriseRepository->findOneBy(["designation"=>$pfe->getEntreprise()->getDesignation()]);
-            $entreprise->addPFE($pfe);
             $this->repository->add($pfe);
-            return $this->redirectToRoute("detail");
+            $this->addFlash("success","le pfe est ajouté avec succés ");
+            return $this->render('add_pfe/detail.html.twig',[
+                "pfe"=>$pfe
+            ]);
         }
         return $this->render('add_pfe/index.html.twig',[
             "form"=>$form->createView()
         ]);
     }
 
-    #[Route('/add/detail', name: "detail")]
-    function detail(){
-        return $this->render('add_pfe/detail.html.twig');
-    }
 
 
 
